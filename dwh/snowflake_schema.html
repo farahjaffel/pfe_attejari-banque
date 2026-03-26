@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Schéma en Flocon — Banque Virtuelle Tunisienne</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap');
+
+  :root {
+    --bg: #05080f;
+    --surface: #0d1220;
+    --border: #1e2d4a;
+    --fact: #0057ff;
+    --fact-glow: #0057ff44;
+    --dim-client: #00c2a8;
+    --dim-tx: #ff6b2b;
+    --dim-int: #a855f7;
+    --sub-client: #00876f;
+    --sub-tx: #c44a18;
+    --sub-int: #7e33c4;
+    --text: #e8edf5;
+    --muted: #6b7fa3;
+    --accent: #f0c040;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Space Mono', monospace;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* HEADER */
+  header {
+    padding: 2rem 3rem 1rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  header h1 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(1rem, 2.5vw, 1.5rem);
+    letter-spacing: -0.02em;
+    color: var(--text);
+  }
+  header h1 span { color: var(--accent); }
+  .stats-bar {
+    display: flex; gap: 2rem; flex-wrap: wrap;
+  }
+  .stat {
+    display: flex; flex-direction: column; align-items: flex-end;
+  }
+  .stat-val {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.1rem;
+    color: var(--accent);
+  }
+  .stat-lbl { font-size: 0.65rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; }
+
+  /* LEGEND */
+  .legend {
+    display: flex; gap: 1.5rem; padding: 0.8rem 3rem; flex-wrap: wrap;
+    border-bottom: 1px solid var(--border);
+    background: #080c17;
+  }
+  .legend-item { display: flex; align-items: center; gap: 0.5rem; font-size: 0.7rem; color: var(--muted); }
+  .legend-dot { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+
+  /* CANVAS AREA */
+  .canvas-wrap {
+    position: relative;
+    width: 100%;
+    overflow: auto;
+    background:
+      radial-gradient(ellipse at 20% 50%, #001a4422 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 20%, #0a002244 0%, transparent 50%),
+      var(--bg);
+  }
+
+  svg#diagram {
+    display: block;
+    width: 1300px;
+    height: 820px;
+    min-width: 1300px;
+  }
+
+  /* TOOLTIP */
+  #tooltip {
+    position: fixed;
+    background: #0d1a2e;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 14px;
+    font-size: 0.7rem;
+    line-height: 1.7;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.15s;
+    max-width: 240px;
+    z-index: 100;
+    box-shadow: 0 8px 32px #00000088;
+  }
+  #tooltip .tt-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.8rem;
+    margin-bottom: 6px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+  }
+  #tooltip .tt-row { display: flex; justify-content: space-between; gap: 1rem; }
+  #tooltip .tt-key { color: var(--muted); }
+  #tooltip .tt-val { color: var(--accent); font-weight: 700; }
+
+  /* INFO PANEL */
+  .info-panel {
+    margin: 1rem 3rem 2rem;
+    padding: 1rem 1.5rem;
+    background: #080c17;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 0.72rem;
+    color: var(--muted);
+    line-height: 1.8;
+  }
+  .info-panel strong { color: var(--text); }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Schéma en <span>Flocon de Neige</span> — Banque Virtuelle Tunisienne</h1>
+  <div class="stats-bar">
+    <div class="stat"><span class="stat-val">100 000</span><span class="stat-lbl">Clients</span></div>
+    <div class="stat"><span class="stat-val">5 000 000</span><span class="stat-lbl">Transactions</span></div>
+    <div class="stat"><span class="stat-val">2 000 000</span><span class="stat-lbl">Interactions</span></div>
+    <div class="stat"><span class="stat-val">697 MB</span><span class="stat-lbl">Total CSV</span></div>
+  </div>
+</header>
+
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot" style="background:#0057ff"></div> Table de Faits</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#00c2a8"></div> Dim. Clients</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#ff6b2b"></div> Dim. Transactions</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#a855f7"></div> Dim. Interactions</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#444"></div> Sous-dimension</div>
+  <div class="legend-item" style="margin-left:auto; color:#6b7fa3">🖱 Survolez les tables pour voir les colonnes</div>
+</div>
+
+<div class="canvas-wrap">
+<svg id="diagram" viewBox="0 0 1300 820" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Glows -->
+    <filter id="glow-blue" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="glow-teal" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="glow-orange" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+
+    <!-- Arrow markers -->
+    <marker id="arr-blue" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#0057ff88"/>
+    </marker>
+    <marker id="arr-teal" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#00c2a888"/>
+    </marker>
+    <marker id="arr-orange" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#ff6b2b88"/>
+    </marker>
+    <marker id="arr-purple" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#a855f788"/>
+    </marker>
+    <marker id="arr-sub" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#44444488"/>
+    </marker>
+
+    <!-- Grid pattern -->
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#0d1a2e" stroke-width="0.5"/>
+    </pattern>
+  </defs>
+
+  <!-- Background grid -->
+  <rect width="1300" height="820" fill="url(#grid)" opacity="0.6"/>
+
+  <!-- ============================================================
+       CONNECTIONS (drawn first, behind tables)
+  ============================================================ -->
+
+  <!-- FACT → DIM_CLIENTS -->
+  <line x1="570" y1="380" x2="470" y2="280" stroke="#00c2a8" stroke-width="1.5" stroke-dasharray="6,3" opacity="0.6" marker-end="url(#arr-teal)"/>
+
+  <!-- FACT → DIM_TRANSACTIONS -->
+  <line x1="650" y1="420" x2="650" y2="560" stroke="#ff6b2b" stroke-width="1.5" stroke-dasharray="6,3" opacity="0.6" marker-end="url(#arr-orange)"/>
+
+  <!-- FACT → DIM_INTERACTIONS -->
+  <line x1="740" y1="380" x2="840" y2="280" stroke="#a855f7" stroke-width="1.5" stroke-dasharray="6,3" opacity="0.6" marker-end="url(#arr-purple)"/>
+
+  <!-- DIM_CLIENTS → SUB: DIM_PROFIL -->
+  <line x1="320" y1="220" x2="210" y2="150" stroke="#00876f" stroke-width="1" stroke-dasharray="4,3" opacity="0.5" marker-end="url(#arr-sub)"/>
+
+  <!-- DIM_CLIENTS → SUB: DIM_GEOGRAPHIE -->
+  <line x1="320" y1="290" x2="180" y2="370" stroke="#00876f" stroke-width="1" stroke-dasharray="4,3" opacity="0.5" marker-end="url(#arr-sub)"/>
+
+  <!-- DIM_CLIENTS → SUB: DIM_PRODUITS -->
+  <line x1="340" y1="160" x2="240" y2="80" stroke="#00876f" stroke-width="1" stroke-dasharray="4,3" opacity="0.5" marker-end="url(#arr-sub)"/>
+
+  <!-- DIM_TRANSACTIONS → SUB: DIM_CANAL_TX -->
+  <line x1="530" y1="640" x2="390" y2="700" stroke="#c44a18" stroke-width="1" stroke-dasharray="4,3" opacity="0.5" marker-end="url(#arr-sub)"/>
+
+  <!-- DIM_TRANSACTIONS → SUB: DIM_CATEGORIE -->
+  <line x1="650" y1="680" x2="650" y2="740" stroke="#c44a18" stroke-width="1" stroke-dasharray="4,3" opacity="0.5" marker-end="url(#arr-sub)"/>
+
+  <!-- DIM_TRANSACTIONS → SUB: DIM_DATE_TX -->
+  <line x1="770" y1="640" x2="900" y2="700" stroke="#c44a18" stroke-width="1" stroke-dasharray="4,3" opacity="0.5" marker-end="url(#arr-sub)"/>
+
+  <!-- DIM_INTERACTIONS → SUB: DIM_CANAL_INT -->
+  <line x1="960" y1="220" x2="1080" y2="140" stroke="#7e33c4" stroke-width="1" stroke-dasharray="4,3" opacity="0.5" marker-end="url(#arr-sub)"/>
+
+  <!-- DIM_INTERACTIONS → SUB: DIM_RECLAMATION -->
+  <line x1="970" y1="290" x2="1100" y2="370" stroke="#7e33c4" stroke-width="1" stroke-dasharray="4,3" opacity="0.5" marker-end="url(#arr-sub)"/>
+
+  <!-- DIM_INTERACTIONS → SUB: DIM_SATISFACTION -->
+  <line x1="950" y1="160" x2="1070" y2="70" stroke="#7e33c4" stroke-width="1" stroke-dasharray="4,3" opacity="0.5" marker-end="url(#arr-sub)"/>
+
+  <!-- ============================================================
+       TABLES
+  ============================================================ -->
+
+  <!-- ===== FACT TABLE: FAITS_CHURN ===== -->
+  <g class="table-group" id="tbl-fact"
+     data-title="FAITS_CHURN"
+     data-color="#0057ff"
+     data-rows="100 000 lignes"
+     data-pk="id_client (FK)"
+     data-cols="id_client, id_transaction, id_interaction, churn, date_snapshot"
+     data-desc="Table de faits centrale reliant clients, transactions et interactions">
+    <!-- glow bg -->
+    <rect x="565" y="310" width="180" height="160" rx="4" fill="#0057ff" opacity="0.06"/>
+    <!-- header -->
+    <rect x="568" y="313" width="174" height="28" rx="3" fill="#0057ff" opacity="0.9"/>
+    <!-- body -->
+    <rect x="568" y="341" width="174" height="126" rx="0" fill="#0d1835"/>
+    <rect x="568" y="438" width="174" height="29" rx="0" ry="0" fill="transparent"/>
+    <rect x="568" y="313" width="174" height="156" rx="3" fill="none" stroke="#0057ff" stroke-width="1.5"/>
+
+    <text x="655" y="332" text-anchor="middle" font-family="Syne,sans-serif" font-weight="700" font-size="11" fill="white" letter-spacing="0.5">⭐ FAITS_CHURN</text>
+
+    <text x="580" y="358" font-family="Space Mono,monospace" font-size="9" fill="#f0c040">🔑 id_client</text>
+    <text x="580" y="372" font-family="Space Mono,monospace" font-size="9" fill="#aab">🔑 id_transaction</text>
+    <text x="580" y="386" font-family="Space Mono,monospace" font-size="9" fill="#aab">🔑 id_interaction</text>
+    <text x="580" y="400" font-family="Space Mono,monospace" font-size="9" fill="#ccd">churn</text>
+    <text x="580" y="414" font-family="Space Mono,monospace" font-size="9" fill="#ccd">date_snapshot</text>
+    <text x="580" y="428" font-family="Space Mono,monospace" font-size="9" fill="#ccd">taux_churn_calcule</text>
+    <text x="580" y="442" font-family="Space Mono,monospace" font-size="9" fill="#ccd">score_risque_final</text>
+
+    <text x="655" y="460" text-anchor="middle" font-family="Space Mono,monospace" font-size="8" fill="#0057ff" opacity="0.8">100 000 lignes · Seed=42</text>
+  </g>
+
+  <!-- ===== DIM CLIENTS ===== -->
+  <g class="table-group" id="tbl-clients"
+     data-title="DIM_CLIENTS"
+     data-color="#00c2a8"
+     data-rows="100 000 lignes"
+     data-pk="id_client (PK)"
+     data-cols="id_client, sexe, age, situation_matrimoniale, enfants_a_charge, profession, anciennete_mois, revenu_mensuel, acces_banque_en_ligne, conseiller_dedie, programme_fidelite, score_risque_interne, nb_produits_actifs, frais_bancaires_mensuels"
+     data-desc="Dimension principale des clients avec profil démographique et bancaire">
+    <rect x="295" y="148" width="180" height="190" rx="4" fill="#00c2a8" opacity="0.05"/>
+    <rect x="298" y="151" width="174" height="26" rx="3" fill="#00c2a8" opacity="0.85"/>
+    <rect x="298" y="177" width="174" height="160" rx="0" fill="#0d1e1c"/>
+    <rect x="298" y="151" width="174" height="187" rx="3" fill="none" stroke="#00c2a8" stroke-width="1.2"/>
+
+    <text x="385" y="168" text-anchor="middle" font-family="Syne,sans-serif" font-weight="700" font-size="10.5" fill="white">DIM_CLIENTS</text>
+
+    <text x="310" y="192" font-family="Space Mono,monospace" font-size="8.5" fill="#f0c040">🔑 id_client</text>
+    <text x="310" y="205" font-family="Space Mono,monospace" font-size="8.5" fill="#9dd">sexe / age / situation</text>
+    <text x="310" y="218" font-family="Space Mono,monospace" font-size="8.5" fill="#9dd">enfants_a_charge</text>
+    <text x="310" y="231" font-family="Space Mono,monospace" font-size="8.5" fill="#9dd">anciennete_mois</text>
+    <text x="310" y="244" font-family="Space Mono,monospace" font-size="8.5" fill="#9dd">revenu_mensuel</text>
+    <text x="310" y="257" font-family="Space Mono,monospace" font-size="8.5" fill="#9dd">conseiller_dedie</text>
+    <text x="310" y="270" font-family="Space Mono,monospace" font-size="8.5" fill="#9dd">programme_fidelite</text>
+    <text x="310" y="283" font-family="Space Mono,monospace" font-size="8.5" fill="#9dd">score_risque_interne</text>
+    <text x="310" y="296" font-family="Space Mono,monospace" font-size="8.5" fill="#9dd">nb_produits_actifs</text>
+    <text x="310" y="309" font-family="Space Mono,monospace" font-size="8.5" fill="#9dd">frais_bancaires_mensuels</text>
+    <text x="385" y="330" text-anchor="middle" font-family="Space Mono,monospace" font-size="7.5" fill="#00c2a8" opacity="0.8">12.3 MB CSV</text>
+  </g>
+
+  <!-- ===== DIM TRANSACTIONS ===== -->
+  <g class="table-group" id="tbl-transactions"
+     data-title="DIM_TRANSACTIONS"
+     data-color="#ff6b2b"
+     data-rows="5 000 000 lignes"
+     data-pk="id_transaction (PK)"
+     data-cols="id_transaction, id_client (FK), date_transaction, type_operation, montant, sens_operation, canal_transaction, solde_avant, solde_apres, est_rejete, categorie_depense"
+     data-desc="Dimension des transactions bancaires avec 5M d'opérations">
+    <rect x="545" y="555" width="210" height="185" rx="4" fill="#ff6b2b" opacity="0.05"/>
+    <rect x="548" y="558" width="204" height="26" rx="3" fill="#ff6b2b" opacity="0.85"/>
+    <rect x="548" y="584" width="204" height="154" rx="0" fill="#1e1008"/>
+    <rect x="548" y="558" width="204" height="182" rx="3" fill="none" stroke="#ff6b2b" stroke-width="1.2"/>
+
+    <text x="650" y="575" text-anchor="middle" font-family="Syne,sans-serif" font-weight="700" font-size="10.5" fill="white">DIM_TRANSACTIONS</text>
+
+    <text x="560" y="598" font-family="Space Mono,monospace" font-size="8.5" fill="#f0c040">🔑 id_transaction</text>
+    <text x="560" y="611" font-family="Space Mono,monospace" font-size="8.5" fill="#f8a">🔗 id_client (FK)</text>
+    <text x="560" y="624" font-family="Space Mono,monospace" font-size="8.5" fill="#dca">date_transaction</text>
+    <text x="560" y="637" font-family="Space Mono,monospace" font-size="8.5" fill="#dca">type_operation</text>
+    <text x="560" y="650" font-family="Space Mono,monospace" font-size="8.5" fill="#dca">montant / sens_operation</text>
+    <text x="560" y="663" font-family="Space Mono,monospace" font-size="8.5" fill="#dca">solde_avant / solde_apres</text>
+    <text x="560" y="676" font-family="Space Mono,monospace" font-size="8.5" fill="#dca">est_rejete</text>
+    <text x="560" y="689" font-family="Space Mono,monospace" font-size="8.5" fill="#dca">categorie_depense</text>
+    <text x="650" y="730" text-anchor="middle" font-family="Space Mono,monospace" font-size="7.5" fill="#ff6b2b" opacity="0.8">481.3 MB CSV · Taux rejet: 3.77%</text>
+  </g>
+
+  <!-- ===== DIM INTERACTIONS ===== -->
+  <g class="table-group" id="tbl-interactions"
+     data-title="DIM_INTERACTIONS"
+     data-color="#a855f7"
+     data-rows="2 000 000 lignes"
+     data-pk="id_interaction (PK)"
+     data-cols="id_interaction, id_client (FK), date_interaction, canal_interaction, type_interaction, est_reclamation, motif_reclamation, statut_resolution, delai_resolution_jours, score_satisfaction_nps, duree_connexion_sec"
+     data-desc="Dimension des interactions client avec canaux et réclamations">
+    <rect x="815" y="148" width="195" height="185" rx="4" fill="#a855f7" opacity="0.05"/>
+    <rect x="818" y="151" width="189" height="26" rx="3" fill="#a855f7" opacity="0.85"/>
+    <rect x="818" y="177" width="189" height="154" rx="0" fill="#150d20"/>
+    <rect x="818" y="151" width="189" height="182" rx="3" fill="none" stroke="#a855f7" stroke-width="1.2"/>
+
+    <text x="913" y="168" text-anchor="middle" font-family="Syne,sans-serif" font-weight="700" font-size="10.5" fill="white">DIM_INTERACTIONS</text>
+
+    <text x="830" y="192" font-family="Space Mono,monospace" font-size="8.5" fill="#f0c040">🔑 id_interaction</text>
+    <text x="830" y="205" font-family="Space Mono,monospace" font-size="8.5" fill="#f8a">🔗 id_client (FK)</text>
+    <text x="830" y="218" font-family="Space Mono,monospace" font-size="8.5" fill="#cba">date_interaction</text>
+    <text x="830" y="231" font-family="Space Mono,monospace" font-size="8.5" fill="#cba">canal_interaction</text>
+    <text x="830" y="244" font-family="Space Mono,monospace" font-size="8.5" fill="#cba">type_interaction</text>
+    <text x="830" y="257" font-family="Space Mono,monospace" font-size="8.5" fill="#cba">est_reclamation</text>
+    <text x="830" y="270" font-family="Space Mono,monospace" font-size="8.5" fill="#cba">motif_reclamation</text>
+    <text x="830" y="283" font-family="Space Mono,monospace" font-size="8.5" fill="#cba">statut_resolution</text>
+    <text x="830" y="296" font-family="Space Mono,monospace" font-size="8.5" fill="#cba">score_satisfaction_nps</text>
+    <text x="830" y="309" font-family="Space Mono,monospace" font-size="8.5" fill="#cba">duree_connexion_sec</text>
+    <text x="913" y="328" text-anchor="middle" font-family="Space Mono,monospace" font-size="7.5" fill="#a855f7" opacity="0.8">203.7 MB CSV · Taux récl: 18.11%</text>
+  </g>
+
+  <!-- ===== SUB: DIM_PROFIL_DEMOGRAPHIQUE ===== -->
+  <g class="table-group" id="tbl-profil"
+     data-title="DIM_PROFIL_DEMOGRAPHIQUE"
+     data-color="#888"
+     data-rows="Dérivée de DIM_CLIENTS"
+     data-pk="id_client (FK)"
+     data-cols="id_client, sexe, date_naissance, est_senior, situation_matrimoniale, enfants_a_charge, profession"
+     data-desc="Sous-dimension profil démographique du client">
+    <rect x="88" y="88" width="170" height="118" rx="3" fill="#0d1220"/>
+    <rect x="88" y="88" width="170" height="22" rx="3" fill="#1e3a2a" opacity="0.9"/>
+    <rect x="88" y="88" width="170" height="118" rx="3" fill="none" stroke="#00876f" stroke-width="1"/>
+    <text x="173" y="103" text-anchor="middle" font-family="Syne,sans-serif" font-weight="600" font-size="9" fill="#00c2a8">DIM_PROFIL_DEMOGRAPHIQUE</text>
+    <text x="98" y="122" font-family="Space Mono,monospace" font-size="8" fill="#f0c040">🔑 id_client</text>
+    <text x="98" y="135" font-family="Space Mono,monospace" font-size="8" fill="#aaa">sexe / date_naissance</text>
+    <text x="98" y="148" font-family="Space Mono,monospace" font-size="8" fill="#aaa">est_senior</text>
+    <text x="98" y="161" font-family="Space Mono,monospace" font-size="8" fill="#aaa">situation_matrimoniale</text>
+    <text x="98" y="174" font-family="Space Mono,monospace" font-size="8" fill="#aaa">enfants_a_charge</text>
+    <text x="98" y="187" font-family="Space Mono,monospace" font-size="8" fill="#aaa">profession</text>
+  </g>
+
+  <!-- SUB: DIM_GEOGRAPHIE -->
+  <g class="table-group" id="tbl-geo"
+     data-title="DIM_GEOGRAPHIE"
+     data-color="#888"
+     data-rows="20 villes"
+     data-pk="id_ville (PK)"
+     data-cols="id_ville, ville_region, region, population_relative"
+     data-desc="Sous-dimension géographique (20 villes tunisiennes)">
+    <rect x="55" y="318" width="160" height="100" rx="3" fill="#0d1220"/>
+    <rect x="55" y="318" width="160" height="22" rx="3" fill="#1e3a2a" opacity="0.9"/>
+    <rect x="55" y="318" width="160" height="100" rx="3" fill="none" stroke="#00876f" stroke-width="1"/>
+    <text x="135" y="333" text-anchor="middle" font-family="Syne,sans-serif" font-weight="600" font-size="9" fill="#00c2a8">DIM_GEOGRAPHIE</text>
+    <text x="65" y="352" font-family="Space Mono,monospace" font-size="8" fill="#f0c040">🔑 id_ville</text>
+    <text x="65" y="365" font-family="Space Mono,monospace" font-size="8" fill="#aaa">ville_region</text>
+    <text x="65" y="378" font-family="Space Mono,monospace" font-size="8" fill="#aaa">region</text>
+    <text x="65" y="391" font-family="Space Mono,monospace" font-size="8" fill="#aaa">population_relative</text>
+    <text x="65" y="408" font-family="Space Mono,monospace" font-size="7.5" fill="#00876f" opacity="0.7">20 villes tunisiennes</text>
+  </g>
+
+  <!-- SUB: DIM_PRODUITS_BANCAIRES -->
+  <g class="table-group" id="tbl-produits"
+     data-title="DIM_PRODUITS_BANCAIRES"
+     data-color="#888"
+     data-rows="Dérivée de DIM_CLIENTS"
+     data-pk="id_client (FK)"
+     data-cols="id_client, nb_produits_actifs, type_convention, acces_banque_en_ligne, service_sms_banking, alerte_securite_active, assurance_moyen_paiement, e_releve_active, methode_paiement_fav"
+     data-desc="Sous-dimension produits et services bancaires souscrits">
+    <rect x="120" y="28" width="170" height="118" rx="3" fill="#0d1220"/>
+    <rect x="120" y="28" width="170" height="22" rx="3" fill="#1e3a2a" opacity="0.9"/>
+    <rect x="120" y="28" width="170" height="118" rx="3" fill="none" stroke="#00876f" stroke-width="1"/>
+    <text x="205" y="43" text-anchor="middle" font-family="Syne,sans-serif" font-weight="600" font-size="9" fill="#00c2a8">DIM_PRODUITS_BANCAIRES</text>
+    <text x="130" y="62" font-family="Space Mono,monospace" font-size="8" fill="#f0c040">🔑 id_client</text>
+    <text x="130" y="75" font-family="Space Mono,monospace" font-size="8" fill="#aaa">nb_produits_actifs</text>
+    <text x="130" y="88" font-family="Space Mono,monospace" font-size="8" fill="#aaa">type_convention</text>
+    <text x="130" y="101" font-family="Space Mono,monospace" font-size="8" fill="#aaa">acces_banque_en_ligne</text>
+    <text x="130" y="114" font-family="Space Mono,monospace" font-size="8" fill="#aaa">service_sms_banking</text>
+    <text x="130" y="127" font-family="Space Mono,monospace" font-size="8" fill="#aaa">assurance / e_releve</text>
+  </g>
+
+  <!-- SUB: DIM_CANAL_TRANSACTION -->
+  <g class="table-group" id="tbl-canal-tx"
+     data-title="DIM_CANAL_TRANSACTION"
+     data-color="#888"
+     data-rows="4 valeurs"
+     data-pk="id_canal (PK)"
+     data-cols="id_canal, canal_transaction, type_canal, est_digital"
+     data-desc="Sous-dimension canaux de transaction (Agence, DAB, TPE, En Ligne)">
+    <rect x="270" y="678" width="165" height="100" rx="3" fill="#0d1220"/>
+    <rect x="270" y="678" width="165" height="22" rx="3" fill="#2a1808" opacity="0.9"/>
+    <rect x="270" y="678" width="165" height="100" rx="3" fill="none" stroke="#c44a18" stroke-width="1"/>
+    <text x="353" y="693" text-anchor="middle" font-family="Syne,sans-serif" font-weight="600" font-size="9" fill="#ff6b2b">DIM_CANAL_TRANSACTION</text>
+    <text x="280" y="712" font-family="Space Mono,monospace" font-size="8" fill="#f0c040">🔑 id_canal</text>
+    <text x="280" y="725" font-family="Space Mono,monospace" font-size="8" fill="#aaa">canal_transaction</text>
+    <text x="280" y="738" font-family="Space Mono,monospace" font-size="8" fill="#aaa">type_canal</text>
+    <text x="280" y="751" font-family="Space Mono,monospace" font-size="8" fill="#aaa">est_digital</text>
+    <text x="280" y="767" font-family="Space Mono,monospace" font-size="7.5" fill="#c44a18" opacity="0.7">Agence · DAB · TPE · En Ligne</text>
+  </g>
+
+  <!-- SUB: DIM_CATEGORIE_DEPENSE -->
+  <g class="table-group" id="tbl-categorie"
+     data-title="DIM_CATEGORIE_DEPENSE"
+     data-color="#888"
+     data-rows="7 catégories"
+     data-pk="id_categorie (PK)"
+     data-cols="id_categorie, categorie_depense, famille_depense"
+     data-desc="Sous-dimension catégories de dépenses (Alimentation, Transport, etc.)">
+    <rect x="573" y="745" width="155" height="85" rx="3" fill="#0d1220"/>
+    <rect x="573" y="745" width="155" height="22" rx="3" fill="#2a1808" opacity="0.9"/>
+    <rect x="573" y="745" width="155" height="85" rx="3" fill="none" stroke="#c44a18" stroke-width="1"/>
+    <text x="651" y="760" text-anchor="middle" font-family="Syne,sans-serif" font-weight="600" font-size="9" fill="#ff6b2b">DIM_CATEGORIE_DEPENSE</text>
+    <text x="583" y="779" font-family="Space Mono,monospace" font-size="8" fill="#f0c040">🔑 id_categorie</text>
+    <text x="583" y="792" font-family="Space Mono,monospace" font-size="8" fill="#aaa">categorie_depense</text>
+    <text x="583" y="805" font-family="Space Mono,monospace" font-size="8" fill="#aaa">famille_depense</text>
+    <text x="583" y="820" font-family="Space Mono,monospace" font-size="7.5" fill="#c44a18" opacity="0.7">7 catégories</text>
+  </g>
+
+  <!-- SUB: DIM_DATE_TRANSACTION -->
+  <g class="table-group" id="tbl-date-tx"
+     data-title="DIM_DATE_TRANSACTION"
+     data-color="#888"
+     data-rows="365 jours × 2 ans"
+     data-pk="date_transaction (PK)"
+     data-cols="date_transaction, annee, mois, trimestre, jour_semaine, est_weekend, heure"
+     data-desc="Sous-dimension temporelle des transactions (2023–2024)">
+    <rect x="860" y="678" width="165" height="108" rx="3" fill="#0d1220"/>
+    <rect x="860" y="678" width="165" height="22" rx="3" fill="#2a1808" opacity="0.9"/>
+    <rect x="860" y="678" width="165" height="108" rx="3" fill="none" stroke="#c44a18" stroke-width="1"/>
+    <text x="943" y="693" text-anchor="middle" font-family="Syne,sans-serif" font-weight="600" font-size="9" fill="#ff6b2b">DIM_DATE_TRANSACTION</text>
+    <text x="870" y="712" font-family="Space Mono,monospace" font-size="8" fill="#f0c040">🔑 date_transaction</text>
+    <text x="870" y="725" font-family="Space Mono,monospace" font-size="8" fill="#aaa">annee / mois / trimestre</text>
+    <text x="870" y="738" font-family="Space Mono,monospace" font-size="8" fill="#aaa">jour_semaine</text>
+    <text x="870" y="751" font-family="Space Mono,monospace" font-size="8" fill="#aaa">est_weekend / heure</text>
+    <text x="870" y="777" font-family="Space Mono,monospace" font-size="7.5" fill="#c44a18" opacity="0.7">2023-01-01 → 2024-12-31</text>
+  </g>
+
+  <!-- SUB: DIM_CANAL_INTERACTION -->
+  <g class="table-group" id="tbl-canal-int"
+     data-title="DIM_CANAL_INTERACTION"
+     data-color="#888"
+     data-rows="4 canaux"
+     data-pk="id_canal (PK)"
+     data-cols="id_canal, canal_interaction, est_digital, type_contact"
+     data-desc="Sous-dimension canaux d'interaction (Agence, Téléphone, App, Web)">
+    <rect x="1063" y="95" width="165" height="100" rx="3" fill="#0d1220"/>
+    <rect x="1063" y="95" width="165" height="22" rx="3" fill="#1a0828" opacity="0.9"/>
+    <rect x="1063" y="95" width="165" height="100" rx="3" fill="none" stroke="#7e33c4" stroke-width="1"/>
+    <text x="1146" y="110" text-anchor="middle" font-family="Syne,sans-serif" font-weight="600" font-size="9" fill="#a855f7">DIM_CANAL_INTERACTION</text>
+    <text x="1073" y="129" font-family="Space Mono,monospace" font-size="8" fill="#f0c040">🔑 id_canal</text>
+    <text x="1073" y="142" font-family="Space Mono,monospace" font-size="8" fill="#aaa">canal_interaction</text>
+    <text x="1073" y="155" font-family="Space Mono,monospace" font-size="8" fill="#aaa">est_digital</text>
+    <text x="1073" y="168" font-family="Space Mono,monospace" font-size="8" fill="#aaa">type_contact</text>
+    <text x="1073" y="184" font-family="Space Mono,monospace" font-size="7.5" fill="#7e33c4" opacity="0.7">Agence · Tél · App · Web</text>
+  </g>
+
+  <!-- SUB: DIM_RECLAMATION -->
+  <g class="table-group" id="tbl-recl"
+     data-title="DIM_RECLAMATION"
+     data-color="#888"
+     data-rows="Dérivée de DIM_INTERACTIONS"
+     data-pk="id_interaction (FK)"
+     data-cols="id_interaction, est_reclamation, motif_reclamation, statut_resolution, delai_resolution_jours"
+     data-desc="Sous-dimension réclamations (18.11% des interactions)">
+    <rect x="1088" y="328" width="165" height="108" rx="3" fill="#0d1220"/>
+    <rect x="1088" y="328" width="165" height="22" rx="3" fill="#1a0828" opacity="0.9"/>
+    <rect x="1088" y="328" width="165" height="108" rx="3" fill="none" stroke="#7e33c4" stroke-width="1"/>
+    <text x="1171" y="343" text-anchor="middle" font-family="Syne,sans-serif" font-weight="600" font-size="9" fill="#a855f7">DIM_RECLAMATION</text>
+    <text x="1098" y="362" font-family="Space Mono,monospace" font-size="8" fill="#f0c040">🔑 id_interaction</text>
+    <text x="1098" y="375" font-family="Space Mono,monospace" font-size="8" fill="#aaa">est_reclamation</text>
+    <text x="1098" y="388" font-family="Space Mono,monospace" font-size="8" fill="#aaa">motif_reclamation</text>
+    <text x="1098" y="401" font-family="Space Mono,monospace" font-size="8" fill="#aaa">statut_resolution</text>
+    <text x="1098" y="414" font-family="Space Mono,monospace" font-size="8" fill="#aaa">delai_resolution_jours</text>
+    <text x="1098" y="428" font-family="Space Mono,monospace" font-size="7.5" fill="#7e33c4" opacity="0.7">Taux récl: 18.11%</text>
+  </g>
+
+  <!-- SUB: DIM_SATISFACTION -->
+  <g class="table-group" id="tbl-satisfaction"
+     data-title="DIM_SATISFACTION_NPS"
+     data-color="#888"
+     data-rows="30% des interactions"
+     data-pk="id_interaction (FK)"
+     data-cols="id_interaction, score_satisfaction_nps, nps_envoye, segment_nps (Promoteur/Neutre/Détracteur)"
+     data-desc="Sous-dimension score NPS (0-10, envoyé à 30% des clients)">
+    <rect x="1043" y="28" width="175" height="100" rx="3" fill="#0d1220"/>
+    <rect x="1043" y="28" width="175" height="22" rx="3" fill="#1a0828" opacity="0.9"/>
+    <rect x="1043" y="28" width="175" height="100" rx="3" fill="none" stroke="#7e33c4" stroke-width="1"/>
+    <text x="1131" y="43" text-anchor="middle" font-family="Syne,sans-serif" font-weight="600" font-size="9" fill="#a855f7">DIM_SATISFACTION_NPS</text>
+    <text x="1053" y="62" font-family="Space Mono,monospace" font-size="8" fill="#f0c040">🔑 id_interaction</text>
+    <text x="1053" y="75" font-family="Space Mono,monospace" font-size="8" fill="#aaa">score_satisfaction_nps</text>
+    <text x="1053" y="88" font-family="Space Mono,monospace" font-size="8" fill="#aaa">nps_envoye</text>
+    <text x="1053" y="101" font-family="Space Mono,monospace" font-size="8" fill="#aaa">segment_nps</text>
+    <text x="1053" y="117" font-family="Space Mono,monospace" font-size="7.5" fill="#7e33c4" opacity="0.7">Promoteur · Neutre · Détracteur</text>
+  </g>
+
+  <!-- Relationship labels -->
+  <text x="510" y="313" font-family="Space Mono,monospace" font-size="7.5" fill="#00c2a8" opacity="0.7">1:N</text>
+  <text x="710" y="490" font-family="Space Mono,monospace" font-size="7.5" fill="#ff6b2b" opacity="0.7">1:N</text>
+  <text x="790" y="313" font-family="Space Mono,monospace" font-size="7.5" fill="#a855f7" opacity="0.7">1:N</text>
+
+</svg>
+</div>
+
+<div class="info-panel">
+  <strong>Architecture Flocon de Neige</strong> — Banque Virtuelle Tunisienne (Seed=42) &nbsp;|&nbsp;
+  <strong>Table centrale :</strong> FAITS_CHURN (100K lignes) &nbsp;|&nbsp;
+  <strong>3 dimensions principales</strong> (Clients · Transactions · Interactions) &nbsp;|&nbsp;
+  <strong>8 sous-dimensions</strong> &nbsp;|&nbsp;
+  Churn cible : <strong>25%</strong> · IV score_risque : <strong>0.40 (Fort)</strong> · PSI global : <strong>Stable</strong>
+</div>
+
+<!-- TOOLTIP -->
+<div id="tooltip">
+  <div class="tt-title" id="tt-title"></div>
+  <div id="tt-body"></div>
+</div>
+
+<script>
+const tooltip = document.getElementById('tooltip');
+const ttTitle = document.getElementById('tt-title');
+const ttBody  = document.getElementById('tt-body');
+
+const colorMap = {
+  '#0057ff': '#4488ff',
+  '#00c2a8': '#00c2a8',
+  '#ff6b2b': '#ff6b2b',
+  '#a855f7': '#a855f7',
+  '#888': '#888',
+};
+
+document.querySelectorAll('.table-group').forEach(g => {
+  g.style.cursor = 'pointer';
+
+  g.addEventListener('mouseenter', e => {
+    const d = g.dataset;
+    const color = colorMap[d.color] || '#aaa';
+    ttTitle.textContent = d.title;
+    ttTitle.style.color = color;
+    ttTitle.style.borderColor = color + '44';
+
+    const cols = (d.cols || '').split(',').map(c => c.trim()).filter(Boolean);
+    let html = `
+      <div class="tt-row"><span class="tt-key">Lignes</span><span class="tt-val">${d.rows}</span></div>
+      <div class="tt-row"><span class="tt-key">Clé primaire</span><span class="tt-val">${d.pk}</span></div>
+      <div style="margin:6px 0; color:#6b7fa3; font-size:0.65rem; border-top:1px solid #1e2d4a; padding-top:6px;">${d.desc}</div>
+      <div style="margin-top:4px; font-size:0.65rem; color:#6b7fa3;">Colonnes :</div>
+    `;
+    cols.forEach(c => {
+      const isPK = c.includes('🔑') || c.toUpperCase().startsWith('ID_');
+      const isFK = c.includes('FK');
+      const col = c.replace('🔑','').replace('(FK)','').trim();
+      html += `<div style="font-size:0.68rem; color:${isFK?'#f8a':isPK?'#f0c040':'#9aa'}">${isFK?'🔗':isPK?'🔑':'·'} ${col}</div>`;
+    });
+    ttBody.innerHTML = html;
+    tooltip.style.opacity = '1';
+  });
+
+  g.addEventListener('mousemove', e => {
+    let x = e.clientX + 16, y = e.clientY + 16;
+    const w = tooltip.offsetWidth, h = tooltip.offsetHeight;
+    if (x + w > window.innerWidth - 10) x = e.clientX - w - 10;
+    if (y + h > window.innerHeight - 10) y = e.clientY - h - 10;
+    tooltip.style.left = x + 'px';
+    tooltip.style.top  = y + 'px';
+  });
+
+  g.addEventListener('mouseleave', () => {
+    tooltip.style.opacity = '0';
+  });
+
+  // Hover highlight
+  g.addEventListener('mouseenter', () => {
+    g.style.opacity = '1';
+    g.querySelectorAll('rect').forEach(r => { r.style.filter = 'brightness(1.3)'; });
+  });
+  g.addEventListener('mouseleave', () => {
+    g.querySelectorAll('rect').forEach(r => { r.style.filter = ''; });
+  });
+});
+</script>
+</body>
+</html>

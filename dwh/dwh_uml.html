@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>DWH UML — Attijari Bank</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#ffffff; font-family:'Courier New', monospace; }
+  svg { display:block; }
+
+  /* UML table styles */
+  .uml-header { font-weight:bold; font-size:11px; }
+  .uml-attr   { font-size:9.5px; }
+  .uml-sep    { stroke:#333; stroke-width:1; }
+
+  /* relation lines */
+  .rel-line   { stroke:#333; stroke-width:1.2; fill:none; }
+  .rel-dash   { stroke:#666; stroke-width:1; fill:none; stroke-dasharray:5,3; }
+
+  /* colors per type */
+  .hd-fait  { fill:#dbeafe; }
+  .hd-cl    { fill:#ede9fe; }
+  .hd-tx    { fill:#ffedd5; }
+  .hd-in    { fill:#cffafe; }
+  .hd-re    { fill:#fce7f3; }
+  .hd-dt    { fill:#f1f5f9; }
+  .hd-fcl   { fill:#f5f3ff; }
+  .hd-ftx   { fill:#fff7ed; }
+  .hd-fin   { fill:#ecfeff; }
+  .hd-fre   { fill:#fdf2f8; }
+
+  .bd-all   { fill:#fafafa; }
+
+  .bdr-fait { stroke:#2563eb; stroke-width:2; }
+  .bdr-cl   { stroke:#7c3aed; stroke-width:1.5; }
+  .bdr-tx   { stroke:#ea580c; stroke-width:1.5; }
+  .bdr-in   { stroke:#0891b2; stroke-width:1.5; }
+  .bdr-re   { stroke:#db2777; stroke-width:1.5; }
+  .bdr-dt   { stroke:#475569; stroke-width:1.5; }
+  .bdr-fcl  { stroke:#a78bfa; stroke-width:1; }
+  .bdr-ftx  { stroke:#fb923c; stroke-width:1; }
+  .bdr-fin  { stroke:#22d3ee; stroke-width:1; }
+  .bdr-fre  { stroke:#f472b6; stroke-width:1; }
+
+  .pk  { fill:#b45309; }
+  .fk  { fill:#6d28d9; }
+  .fe  { fill:#059669; }
+  .tg  { fill:#db2777; }
+  .gh  { fill:#94a3b8; }
+  .nm  { fill:#1f2937; }
+  .sc  { fill:#6b7280; font-style:italic; }
+</style>
+</head>
+<body>
+<svg xmlns="http://www.w3.org/2000/svg" width="1700" height="1400" viewBox="0 0 1700 1400">
+
+<defs>
+  <!-- arrowhead for 1-N -->
+  <marker id="arr" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+    <polygon points="0 0, 10 3.5, 0 7" fill="#444"/>
+  </marker>
+  <!-- open diamond for 1:1 -->
+  <marker id="diamond" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto">
+    <polygon points="5,1 9,5 5,9 1,5" fill="white" stroke="#444" stroke-width="1"/>
+  </marker>
+  <marker id="arr2" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+    <polygon points="0 0, 8 3, 0 6" fill="#555"/>
+  </marker>
+</defs>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- TITLE -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<text x="850" y="22" text-anchor="middle" font-family="Courier New" font-size="13" font-weight="bold" fill="#1e293b">DWH — Schéma Snowflake · Attijari Bank Tunisie · FAIT_CHURN_CLIENT</text>
+<text x="850" y="38" text-anchor="middle" font-family="Courier New" font-size="10" fill="#64748b">1 table de faits · 5 dimensions · 12 flocons · Granularité : 1 client × 1 mois</text>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- MACRO: UML table drawn manually                               -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+
+<!-- ─────────────── FLOCONS CLIENT ─────────────── -->
+
+<!-- DIM_PROFIL  x=30 y=55 w=200 -->
+<g id="DIM_PROFIL">
+  <rect x="30" y="55" width="200" height="148" rx="3" class="bdr-fcl bd-all"/>
+  <rect x="30" y="55" width="200" height="20" rx="3" class="hd-fcl bdr-fcl"/>
+  <rect x="30" y="65" width="200" height="10" class="hd-fcl"/>
+  <text x="130" y="68" text-anchor="middle" class="uml-header" fill="#6d28d9" font-family="Courier New" font-size="11" font-weight="bold">DIM_PROFIL</text>
+  <line x1="30" y1="75" x2="230" y2="75" class="uml-sep"/>
+  <text x="36" y="87" class="uml-attr pk" font-family="Courier New" font-size="9.5" fill="#b45309">🔑 id_profil_SK : INT PK</text>
+  <line x1="30" y1="92" x2="230" y2="92" stroke="#ddd" stroke-width="0.5"/>
+  <text x="36" y="103" class="uml-attr" font-family="Courier New" font-size="9.5" fill="#1f2937">  sexe : CHAR(1)</text>
+  <text x="36" y="116" class="uml-attr" font-family="Courier New" font-size="9.5" fill="#1f2937">  date_naissance : DATE</text>
+  <text x="36" y="129" class="uml-attr" font-family="Courier New" font-size="9.5" fill="#1f2937">  situation_matrimoniale : VAR</text>
+  <text x="36" y="142" class="uml-attr" font-family="Courier New" font-size="9.5" fill="#1f2937">  enfants_a_charge : INT</text>
+  <text x="36" y="155" class="uml-attr" font-family="Courier New" font-size="9.5" fill="#1f2937">  profession : VARCHAR</text>
+  <text x="36" y="168" class="uml-attr" font-family="Courier New" font-size="9.5" fill="#1f2937">  ville_region : VARCHAR</text>
+  <rect x="30" y="55" width="200" height="148" rx="3" fill="none" class="bdr-fcl"/>
+</g>
+
+<!-- DIM_DIGITAL  x=250 y=55 w=200 -->
+<g id="DIM_DIGITAL">
+  <rect x="250" y="55" width="210" height="135" rx="3" class="bdr-fcl bd-all"/>
+  <rect x="250" y="55" width="210" height="20" rx="3" class="hd-fcl bdr-fcl"/>
+  <rect x="250" y="65" width="210" height="10" class="hd-fcl"/>
+  <text x="355" y="68" text-anchor="middle" class="uml-header" fill="#6d28d9" font-family="Courier New" font-size="11" font-weight="bold">DIM_DIGITAL</text>
+  <line x1="250" y1="75" x2="460" y2="75" class="uml-sep"/>
+  <text x="256" y="87" font-family="Courier New" font-size="9.5" fill="#b45309">🔑 id_digital_SK : INT PK</text>
+  <line x1="250" y1="92" x2="460" y2="92" stroke="#ddd" stroke-width="0.5"/>
+  <text x="256" y="103" font-family="Courier New" font-size="9.5" fill="#1f2937">  acces_banque_en_ligne : VAR</text>
+  <text x="256" y="116" font-family="Courier New" font-size="9.5" fill="#1f2937">  service_sms_banking : INT</text>
+  <text x="256" y="129" font-family="Courier New" font-size="9.5" fill="#1f2937">  alerte_securite_active : INT</text>
+  <text x="256" y="142" font-family="Courier New" font-size="9.5" fill="#1f2937">  e_releve_active : INT</text>
+  <text x="256" y="155" font-family="Courier New" font-size="9.5" fill="#1f2937">  methode_paiement_fav : VAR</text>
+  <rect x="250" y="55" width="210" height="135" rx="3" fill="none" class="bdr-fcl"/>
+</g>
+
+<!-- DIM_PRODUITS  x=480 y=55 w=200 -->
+<g id="DIM_PRODUITS">
+  <rect x="480" y="55" width="200" height="122" rx="3" class="bdr-fcl bd-all"/>
+  <rect x="480" y="55" width="200" height="20" rx="3" class="hd-fcl bdr-fcl"/>
+  <rect x="480" y="65" width="200" height="10" class="hd-fcl"/>
+  <text x="580" y="68" text-anchor="middle" font-family="Courier New" font-size="11" font-weight="bold" fill="#6d28d9">DIM_PRODUITS</text>
+  <line x1="480" y1="75" x2="680" y2="75" class="uml-sep"/>
+  <text x="486" y="87" font-family="Courier New" font-size="9.5" fill="#b45309">🔑 id_produit_SK : INT PK</text>
+  <line x1="480" y1="92" x2="680" y2="92" stroke="#ddd" stroke-width="0.5"/>
+  <text x="486" y="103" font-family="Courier New" font-size="9.5" fill="#1f2937">  nb_produits_actifs : INT</text>
+  <text x="486" y="116" font-family="Courier New" font-size="9.5" fill="#1f2937">  type_convention : VARCHAR</text>
+  <text x="486" y="129" font-family="Courier New" font-size="9.5" fill="#1f2937">  conseiller_dedie : INT</text>
+  <text x="486" y="142" font-family="Courier New" font-size="9.5" fill="#1f2937">  programme_fidelite : INT</text>
+  <rect x="480" y="55" width="200" height="122" rx="3" fill="none" class="bdr-fcl"/>
+</g>
+
+<!-- DIM_FINANCIER  x=700 y=55 w=200 -->
+<g id="DIM_FINANCIER">
+  <rect x="700" y="55" width="215" height="122" rx="3" class="bdr-fcl bd-all"/>
+  <rect x="700" y="55" width="215" height="20" rx="3" class="hd-fcl bdr-fcl"/>
+  <rect x="700" y="65" width="215" height="10" class="hd-fcl"/>
+  <text x="807" y="68" text-anchor="middle" font-family="Courier New" font-size="11" font-weight="bold" fill="#6d28d9">DIM_FINANCIER</text>
+  <line x1="700" y1="75" x2="915" y2="75" class="uml-sep"/>
+  <text x="706" y="87" font-family="Courier New" font-size="9.5" fill="#b45309">🔑 id_financier_SK : INT PK</text>
+  <line x1="700" y1="92" x2="915" y2="92" stroke="#ddd" stroke-width="0.5"/>
+  <text x="706" y="103" font-family="Courier New" font-size="9.5" fill="#1f2937">  revenu_mensuel : FLOAT</text>
+  <text x="706" y="116" font-family="Courier New" font-size="9.5" fill="#1f2937">  frais_bancaires_mensuels : FLOAT</text>
+  <text x="706" y="129" font-family="Courier New" font-size="9.5" fill="#1f2937">  total_frais_cumules : FLOAT</text>
+  <text x="706" y="142" font-family="Courier New" font-size="9.5" fill="#1f2937">  score_risque_interne : INT</text>
+  <rect x="700" y="55" width="215" height="122" rx="3" fill="none" class="bdr-fcl"/>
+</g>
+
+<!-- ─────────────── DIM_CLIENT  x=310 y=270 ─────────────── -->
+<g id="DIM_CLIENT">
+  <rect x="200" y="270" width="230" height="215" rx="3" class="bdr-cl bd-all"/>
+  <rect x="200" y="270" width="230" height="20" rx="3" class="hd-cl bdr-cl"/>
+  <rect x="200" y="280" width="230" height="10" class="hd-cl"/>
+  <text x="315" y="283" text-anchor="middle" font-family="Courier New" font-size="11" font-weight="bold" fill="#6d28d9">DIM_CLIENT</text>
+  <line x1="200" y1="290" x2="430" y2="290" stroke="#7c3aed" stroke-width="1.5"/>
+  <text x="206" y="302" font-family="Courier New" font-size="9.5" fill="#b45309">🔑 id_client_SK : INT PK</text>
+  <text x="206" y="315" font-family="Courier New" font-size="9.5" fill="#b45309">   id_client : VARCHAR NK</text>
+  <line x1="200" y1="320" x2="430" y2="320" stroke="#ddd" stroke-width="0.5"/>
+  <text x="206" y="332" font-family="Courier New" font-size="9.5" fill="#6d28d9">🔗 id_profil_SK : FK</text>
+  <text x="206" y="345" font-family="Courier New" font-size="9.5" fill="#6d28d9">🔗 id_digital_SK : FK</text>
+  <text x="206" y="358" font-family="Courier New" font-size="9.5" fill="#6d28d9">🔗 id_produit_SK : FK</text>
+  <text x="206" y="371" font-family="Courier New" font-size="9.5" fill="#6d28d9">🔗 id_financier_SK : FK</text>
+  <line x1="200" y1="376" x2="430" y2="376" stroke="#ddd" stroke-width="0.5"/>
+  <text x="206" y="388" font-family="Courier New" font-size="9.5" fill="#1f2937">  anciennete_mois : INT</text>
+  <text x="206" y="401" font-family="Courier New" font-size="9.5" fill="#1f2937">  date_derniere_activite : DATE</text>
+  <line x1="200" y1="406" x2="430" y2="406" stroke="#ddd" stroke-width="0.5"/>
+  <text x="206" y="416" font-family="Courier New" font-size="9" fill="#6b7280" font-style="italic">  «SCD Type 2»</text>
+  <text x="206" y="428" font-family="Courier New" font-size="9.5" fill="#1f2937">  date_debut_validite : DATE</text>
+  <text x="206" y="441" font-family="Courier New" font-size="9.5" fill="#1f2937">  date_fin_validite : DATE</text>
+  <text x="206" y="454" font-family="Courier New" font-size="9.5" fill="#1f2937">  est_courant : INT</text>
+  <rect x="200" y="270" width="230" height="215" rx="3" fill="none" class="bdr-cl"/>
+</g>
+
+<!-- ─────────────── FLOCONS TX ─────────────── -->
+
+<!-- DIM_TYPE_OPER x=950 y=55 -->
+<g id="DIM_TYPE_OPER">
+  <rect x="950" y="55" width="185" height="95" rx="3" class="bdr-ftx bd-all"/>
+  <rect x="950" y="55" width="185" height="20" rx="3" class="hd-ftx bdr-ftx"/>
+  <rect x="950" y="65" width="185" height="10" class="hd-ftx"/>
+  <text x="1042" y="68" text-anchor="middle" font-family="Courier New" font-size="10" font-weight="bold" fill="#c2410c">DIM_TYPE_OPER</text>
+  <line x1="950" y1="75" x2="1135" y2="75" stroke="#fb923c" stroke-width="1"/>
+  <text x="956" y="87" font-family="Courier New" font-size="9.5" fill="#b45309">🔑 id_type_oper_SK : INT PK</text>
+  <line x1="950" y1="92" x2="1135" y2="92" stroke="#ddd" stroke-width="0.5"/>
+  <text x="956" y="103" font-family="Courier New" font-size="9.5" fill="#1f2937">  type_operation : VARCHAR</text>
+  <text x="956" y="116" font-family="Courier New" font-size="9.5" fill="#1f2937">  libelle : VARCHAR</text>
+  <rect x="950" y="55" width="185" height="95" rx="3" fill="none" class="bdr-ftx"/>
+</g>
+
+<!-- DIM_CANAL_TX x=1155 y=55 -->
+<g id="DIM_CANAL_TX">
+  <rect x="1155" y="55" width="185" height="95" rx="3" class="bdr-ftx bd-all"/>
+  <rect x="1155" y="55" width="185" height="20" rx="3" class="hd-ftx bdr-ftx"/>
+  <rect x="1155" y="65" width="185" height="10" class="hd-ftx"/>
+  <text x="1247" y="68" text-anchor="middle" font-family="Courier New" font-size="10" font-weight="bold" fill="#c2410c">DIM_CANAL_TX</text>
+  <line x1="1155" y1="75" x2="1340" y2="75" stroke="#fb923c" stroke-width="1"/>
+  <text x="1161" y="87" font-family="Courier New" font-size="9.5" fill="#b45309">🔑 id_canal_tx_SK : INT PK</text>
+  <line x1="1155" y1="92" x2="1340" y2="92" stroke="#ddd" stroke-width="0.5"/>
+  <text x="1161" y="103" font-family="Courier New" font-size="9.5" fill="#1f2937">  canal_transaction : VARCHAR</text>
+  <text x="1161" y="116" font-family="Courier New" font-size="9.5" fill="#1f2937">  libelle_canal : VARCHAR</text>
+  <rect x="1155" y="55" width="185" height="95" rx="3" fill="none" class="bdr-ftx"/>
+</g>
+
+<!-- DIM_SENS_OPER x=950 y=170 -->
+<g id="DIM_SENS_OPER">
+  <rect x="950" y="170" width="185" height="95" rx="3" class="bdr-ftx bd-all"/>
+  <rect x="950" y="170" width="185" height="20" rx="3" class="hd-ftx bdr-ftx"/>
+  <rect x="950" y="180" width="185" height="10" class="hd-ftx"/>
+  <text x="1042" y="183" text-anchor="middle" font-family="Courier New" font-size="10" font-weight="bold" fill="#c2410c">DIM_SENS_OPER</text>
+  <line x1="950" y1="190" x2="1135" y2="190" stroke="#fb923c" stroke-width="1"/>
+  <text x="956" y="202" font-family="Courier New" font-size="9.5" fill="#b45309">🔑 id_sens_SK : INT PK</text>
+  <line x1="950" y1="207" x2="1135" y2="207" stroke="#ddd" stroke-width="0.5"/>
+  <text x="956" y="218" font-family="Courier New" font-size="9.5" fill="#1f2937">  sens_operation : VARCHAR</text>
+  <text x="956" y="231" font-family="Courier New" font-size="9.5" fill="#1f2937">  debit_credit : VARCHAR</text>
+  <rect x="950" y="170" width="185" height="95" rx="3" fill="none" class="bdr-ftx"/>
+</g>
+
+<!-- DIM_PRODUIT_TX x=1155 y=170 -->
+<g id="DIM_PRODUIT_TX">
+  <rect x="1155" y="170" width="185" height="95" rx="3" class="bdr-ftx bd-all"/>
+  <rect x="1155" y="170" width="185" height="20" rx="3" class="hd-ftx bdr-ftx"/>
+  <rect x="1155" y="180" width="185" height="10" class="hd-ftx"/>
+  <text x="1247" y="183" text-anchor="middle" font-family="Courier New" font-size="10" font-weight="bold" fill="#c2410c">DIM_PRODUIT_TX</text>
+  <line x1="1155" y1="190" x2="1340" y2="190" stroke="#fb923c" stroke-width="1"/>
+  <text x="1161" y="202" font-family="Courier New" font-size="9.5" fill="#b45309">🔑 id_produit_tx_SK : INT PK</text>
+  <line x1="1155" y1="207" x2="1340" y2="207" stroke="#ddd" stroke-width="0.5"/>
+  <text x="1161" y="218" font-family="Courier New" font-size="9.5" fill="#1f2937">  type_produit_associe : VAR</text>
+  <text x="1161" y="231" font-family="Courier New" font-size="9.5" fill="#1f2937">  categorie : VARCHAR</text>
+  <rect x="1155" y="170" width="185" height="95" rx="3" fill="none" class="bdr-ftx"/>
+</g>
+
+<!-- ─────────────── DIM_TRANSACTION x=1020 y=340 ─────────────── -->
+<g id="DIM_TRANSACTION">
+  <rect x="1010" y="300" width="230" height="175" rx="3" class="bdr-tx bd-all"/>
+  <rect x="1010" y="300" width="230" height="20" rx="3" class="hd-tx bdr-tx"/>
+  <rect x="1010" y="310" width="230" height="10" class="hd-tx"/>
+  <text x="1125" y="313" text-anchor="middle" font-family="Courier New" font-size="11" font-weight="bold" fill="#c2410c">DIM_TRANSACTION</text>
+  <line x1="1010" y1="320" x2="1240" y2="320" stroke="#ea580c" stroke-width="1.5"/>
+  <text x="1016" y="332" font-family="Courier New" font-size="9.5" fill="#b45309">🔑 id_dim_tx_SK : INT PK</text>
+  <line x1="1010" y1="337" x2="1240" y2="337" stroke="#ddd" stroke-width="0.5"/>
+  <text x="1016" y="349" font-family="Courier New" font-size="9.5" fill="#6d28d9">🔗 id_type_oper_SK : FK</text>
+  <text x="1016" y="362" font-family="Courier New" font-size="9.5" fill="#6d28d9">🔗 id_canal_tx_SK : FK</text>
+  <text x="1016" y="375" font-family="Courier New" font-size="9.5" fill="#6d28d9">🔗 id_sens_SK : FK</text>
+  <text x="1016" y="388" font-family="Courier New" font-size="9.5" fill="#6d28d9">🔗 id_produit_tx_SK : FK</text>
+  <line x1="1010" y1="393" x2="1240" y2="393" stroke="#ddd" stroke-width="0.5"/>
+  <text x="1016" y="405" font-family="Courier New" font-size="9.5" fill="#1f2937">  montant : FLOAT</text>
+  <text x="1016" y="418" font-family="Courier New" font-size="9.5" fill="#1f2937">  solde_avant : FLOAT</text>
+  <text x="1016" y="431" font-family="Courier New" font-size="9.5" fill="#1f2937">  solde_apres_operation : FLOAT</text>
+  <text x="1016" y="444" font-family="Courier New" font-size="9.5" fill="#1f2937">  est_rejete : INT</text>
+  <text x="1016" y="457" font-family="Courier New" font-size="9.5" fill="#1f2937">  date_transaction : DATETIME</text>
+  <rect x="1010" y="300" width="230" height="175" rx="3" fill="none" class="bdr-tx"/>
+</g>
+
+<!-- ─────────────── FLOCONS INTERACTION ─────────────── -->
+
+<!-- DIM_CANAL_INTER x=1360 y=55 -->
+<g id="DIM_CANAL_INTER">
+  <rect x="1370" y="55" width="185" height="95" rx="3" class="bdr-fin bd-all"/>
+  <rect x="1370" y="55" width="185" height="20" rx="3" class="hd-fin bdr-fin"/>
+  <rect x="1370" y="65" width="185" height="10" class="hd-fin"/>
+  <text x="1462" y="68" text-anchor="middle" font-family="Courier New" font-size="10" font-weight="bold" fill="#0891b2">DIM_CANAL_INTER</text>
+  <line x1="1370" y1="75" x2="1555" y2="75" stroke="#22d3ee" stroke-width="1"/>
+  <text x="1376" y="87" font-family="Courier New" font-size="9.5" fill="#b45309">🔑 id_canal_inter_SK : INT PK</text>
+  <line x1="1370" y1="92" x2="1555" y2="92" stroke="#ddd" stroke-width="0.5"/>
+  <text x="1376" y="103" font-family="Courier New" font-size="9.5" fill="#1f2937">  canal_interaction : VARCHAR</text>
+  <text x="1376" y="116" font-family="Courier New" font-size="9.5" fill="#1f2937">  libelle : VARCHAR</text>
+  <rect x="1370" y="55" width="185" height="95" rx="3" fill="none" class="bdr-fin"/>
+</g>
+
+<!-- DIM_TYPE_INTER x=1360 y=170 -->
+<g id="DIM_TYPE_INTER">
+  <rect x="1370" y="170" width="185" height="95" rx="3" class="bdr-fin bd-all"/>
+  <rect x="1370" y="170" width="185" height="20" rx="3" class="hd-fin bdr-fin"/>
+  <rect x="1370" y="180" width="185" height="10" class="hd-fin"/>
+  <text x="1462" y="183" text-anchor="middle" font-family="Courier New" font-size="10" font-weight="bold" fill="#0891b2">DIM_TYPE_INTER</text>
+  <line x1="1370" y1="190" x2="1555" y2="190" stroke="#22d3ee" stroke-width="1"/>
+  <text x="1376" y="202" font-family="Courier New" font-size="9.5" fill="#b45309">🔑 id_type_inter_SK : INT PK</text>
+  <line x1="1370" y1="207" x2="1555" y2="207" stroke="#ddd" stroke-width="0.5"/>
+  <text x="1376" y="218" font-family="Courier New" font-size="9.5" fill="#1f2937">  type_interaction : VARCHAR</text>
+  <text x="1376" y="231" font-family="Courier New" font-size="9.5" fill="#1f2937">  libelle : VARCHAR</text>
+  <rect x="1370" y="170" width="185" height="95" rx="3" fill="none" class="bdr-fin"/>
+</g>
+
+<!-- ─────────────── DIM_INTERACTION x=1390 y=310 ─────────────── -->
+<g id="DIM_INTERACTION">
+  <rect x="1370" y="300" width="230" height="148" rx="3" class="bdr-in bd-all"/>
+  <rect x="1370" y="300" width="230" height="20" rx="3" class="hd-in bdr-in"/>
+  <rect x="1370" y="310" width="230" height="10" class="hd-in"/>
+  <text x="1485" y="313" text-anchor="middle" font-family="Courier New" font-size="11" font-weight="bold" fill="#0e7490">DIM_INTERACTION</text>
+  <line x1="1370" y1="320" x2="1600" y2="320" stroke="#0891b2" stroke-width="1.5"/>
+  <text x="1376" y="332" font-family="Courier New" font-size="9.5" fill="#b45309">🔑 id_dim_inter_SK : INT PK</text>
+  <line x1="1370" y1="337" x2="1600" y2="337" stroke="#ddd" stroke-width="0.5"/>
+  <text x="1376" y="349" font-family="Courier New" font-size="9.5" fill="#6d28d9">🔗 id_canal_inter_SK : FK</text>
+  <text x="1376" y="362" font-family="Courier New" font-size="9.5" fill="#6d28d9">🔗 id_type_inter_SK : FK</text>
+  <line x1="1370" y1="367" x2="1600" y2="367" stroke="#ddd" stroke-width="0.5"/>
+  <text x="1376" y="379" font-family="Courier New" font-size="9.5" fill="#1f2937">  duree_connexion_sec : INT</text>
+  <text x="1376" y="392" font-family="Courier New" font-size="9.5" fill="#1f2937">  score_satisfaction_nps : FLOAT</text>
+  <text x="1376" y="405" font-family="Courier New" font-size="9.5" fill="#1f2937">  date_interaction : DATETIME</text>
+  <rect x="1370" y="300" width="230" height="148" rx="3" fill="none" class="bdr-in"/>
+</g>
+
+<!-- ─────────────── FLOCONS RECLAMATION ─────────────── -->
+
+<!-- DIM_MOTIF_RECL x=50 y=490 -->
+<g id="DIM_MOTIF_RECL">
+  <rect x="30" y="490" width="190" height="95" rx="3" class="bdr-fre bd-all"/>
+  <rect x="30" y="490" width="190" height="20" rx="3" class="hd-fre bdr-fre"/>
+  <rect x="30" y="500" width="190" height="10" class="hd-fre"/>
+  <text x="125" y="503" text-anchor="middle" font-family="Courier New" font-size="10" font-weight="bold" fill="#be185d">DIM_MOTIF_RECL</text>
+  <line x1="30" y1="510" x2="220" y2="510" stroke="#f472b6" stroke-width="1"/>
+  <text x="36" y="522" font-family="Courier New" font-size="9.5" fill="#b45309">🔑 id_motif_SK : INT PK</text>
+  <line x1="30" y1="527" x2="220" y2="527" stroke="#ddd" stroke-width="0.5"/>
+  <text x="36" y="538" font-family="Courier New" font-size="9.5" fill="#1f2937">  motif_reclamation : VARCHAR</text>
+  <text x="36" y="551" font-family="Courier New" font-size="9.5" fill="#1f2937">  categorie_motif : VARCHAR</text>
+  <rect x="30" y="490" width="190" height="95" rx="3" fill="none" class="bdr-fre"/>
+</g>
+
+<!-- DIM_STATUT_RECL x=240 y=490 -->
+<g id="DIM_STATUT_RECL">
+  <rect x="230" y="490" width="190" height="95" rx="3" class="bdr-fre bd-all"/>
+  <rect x="230" y="490" width="190" height="20" rx="3" class="hd-fre bdr-fre"/>
+  <rect x="230" y="500" width="190" height="10" class="hd-fre"/>
+  <text x="325" y="503" text-anchor="middle" font-family="Courier New" font-size="10" font-weight="bold" fill="#be185d">DIM_STATUT_RECL</text>
+  <line x1="230" y1="510" x2="420" y2="510" stroke="#f472b6" stroke-width="1"/>
+  <text x="236" y="522" font-family="Courier New" font-size="9.5" fill="#b45309">🔑 id_statut_SK : INT PK</text>
+  <line x1="230" y1="527" x2="420" y2="527" stroke="#ddd" stroke-width="0.5"/>
+  <text x="236" y="538" font-family="Courier New" font-size="9.5" fill="#1f2937">  statut_resolution : VARCHAR</text>
+  <text x="236" y="551" font-family="Courier New" font-size="9.5" fill="#1f2937">  resolu_oui_non : INT</text>
+  <rect x="230" y="490" width="190" height="95" rx="3" fill="none" class="bdr-fre"/>
+</g>
+
+<!-- ─────────────── DIM_RECLAMATION x=100 y=620 ─────────────── -->
+<g id="DIM_RECLAMATION">
+  <rect x="30" y="620" width="230" height="122" rx="3" class="bdr-re bd-all"/>
+  <rect x="30" y="620" width="230" height="20" rx="3" class="hd-re bdr-re"/>
+  <rect x="30" y="630" width="230" height="10" class="hd-re"/>
+  <text x="145" y="633" text-anchor="middle" font-family="Courier New" font-size="11" font-weight="bold" fill="#be185d">DIM_RECLAMATION</text>
+  <line x1="30" y1="640" x2="260" y2="640" stroke="#db2777" stroke-width="1.5"/>
+  <text x="36" y="652" font-family="Courier New" font-size="9.5" fill="#b45309">🔑 id_dim_recl_SK : INT PK</text>
+  <line x1="30" y1="657" x2="260" y2="657" stroke="#ddd" stroke-width="0.5"/>
+  <text x="36" y="669" font-family="Courier New" font-size="9.5" fill="#6d28d9">🔗 id_motif_SK : FK</text>
+  <text x="36" y="682" font-family="Courier New" font-size="9.5" fill="#6d28d9">🔗 id_statut_SK : FK</text>
+  <line x1="30" y1="687" x2="260" y2="687" stroke="#ddd" stroke-width="0.5"/>
+  <text x="36" y="699" font-family="Courier New" font-size="9.5" fill="#1f2937">  est_reclamation : INT</text>
+  <text x="36" y="712" font-family="Courier New" font-size="9.5" fill="#1f2937">  delai_resolution_jours : FLOAT</text>
+  <rect x="30" y="620" width="230" height="122" rx="3" fill="none" class="bdr-re"/>
+</g>
+
+<!-- ─────────────── DIM_DATE x=450 y=620 ─────────────── -->
+<g id="DIM_DATE">
+  <rect x="430" y="560" width="215" height="210" rx="3" class="bdr-dt bd-all"/>
+  <rect x="430" y="560" width="215" height="20" rx="3" class="hd-dt bdr-dt"/>
+  <rect x="430" y="570" width="215" height="10" class="hd-dt"/>
+  <text x="537" y="573" text-anchor="middle" font-family="Courier New" font-size="11" font-weight="bold" fill="#334155">DIM_DATE</text>
+  <line x1="430" y1="580" x2="645" y2="580" stroke="#475569" stroke-width="1.5"/>
+  <text x="436" y="592" font-family="Courier New" font-size="9.5" fill="#b45309">🔑 id_date_SK : INT PK</text>
+  <line x1="430" y1="597" x2="645" y2="597" stroke="#ddd" stroke-width="0.5"/>
+  <text x="436" y="609" font-family="Courier New" font-size="9.5" fill="#1f2937">  date_complete : DATE</text>
+  <text x="436" y="622" font-family="Courier New" font-size="9.5" fill="#1f2937">  annee : INT</text>
+  <text x="436" y="635" font-family="Courier New" font-size="9.5" fill="#1f2937">  trimestre : INT</text>
+  <text x="436" y="648" font-family="Courier New" font-size="9.5" fill="#1f2937">  mois : INT</text>
+  <text x="436" y="661" font-family="Courier New" font-size="9.5" fill="#1f2937">  semaine : INT</text>
+  <text x="436" y="674" font-family="Courier New" font-size="9.5" fill="#1f2937">  jour_du_mois : INT</text>
+  <text x="436" y="687" font-family="Courier New" font-size="9.5" fill="#1f2937">  jour_semaine : VARCHAR</text>
+  <text x="436" y="700" font-family="Courier New" font-size="9.5" fill="#1f2937">  est_weekend : INT</text>
+  <text x="436" y="713" font-family="Courier New" font-size="9.5" fill="#1f2937">  est_fin_de_mois : INT</text>
+  <text x="436" y="726" font-family="Courier New" font-size="9.5" fill="#1f2937">  libelle_mois : VARCHAR</text>
+  <rect x="430" y="560" width="215" height="210" rx="3" fill="none" class="bdr-dt"/>
+</g>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- FAIT_CHURN_CLIENT  x=500 y=820 -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<g id="FAIT_CHURN_CLIENT">
+  <rect x="340" y="820" width="1050" height="530" rx="4" class="bdr-fait bd-all"/>
+  <rect x="340" y="820" width="1050" height="22" rx="4" class="hd-fait bdr-fait"/>
+  <rect x="340" y="832" width="1050" height="10" class="hd-fait"/>
+  <text x="865" y="834" text-anchor="middle" font-family="Courier New" font-size="12" font-weight="bold" fill="#1d4ed8">FAIT_CHURN_CLIENT</text>
+  <text x="1330" y="834" text-anchor="end" font-family="Courier New" font-size="9" fill="#3b82f6">Granularité : 1 client × 1 mois</text>
+  <line x1="340" y1="842" x2="1390" y2="842" stroke="#2563eb" stroke-width="1.5"/>
+
+  <!-- Col dividers -->
+  <line x1="515" y1="842" x2="515" y2="1350" stroke="#e5e7eb" stroke-width="1"/>
+  <line x1="690" y1="842" x2="690" y2="1350" stroke="#e5e7eb" stroke-width="1"/>
+  <line x1="865" y1="842" x2="865" y2="1350" stroke="#e5e7eb" stroke-width="1"/>
+  <line x1="1040" y1="842" x2="1040" y2="1350" stroke="#e5e7eb" stroke-width="1"/>
+  <line x1="1215" y1="842" x2="1215" y2="1350" stroke="#e5e7eb" stroke-width="1"/>
+
+  <!-- COL 1: Clés -->
+  <text x="427" y="858" text-anchor="middle" font-family="Courier New" font-size="9" fill="#2563eb" font-weight="bold">── CLÉS ──</text>
+  <text x="346" y="872" font-family="Courier New" font-size="9.5" fill="#b45309">🔑 id_churn_SK : INT PK</text>
+  <line x1="340" y1="877" x2="515" y2="877" stroke="#f0f0f0" stroke-width="0.5"/>
+  <text x="346" y="889" font-family="Courier New" font-size="9.5" fill="#6d28d9">🔗 id_client_SK : FK</text>
+  <text x="346" y="902" font-family="Courier New" font-size="9.5" fill="#6d28d9">🔗 id_date_SK : FK</text>
+  <text x="346" y="915" font-family="Courier New" font-size="9.5" fill="#6d28d9">🔗 id_dim_tx_SK : FK</text>
+  <text x="346" y="928" font-family="Courier New" font-size="9.5" fill="#6d28d9">🔗 id_dim_inter_SK : FK</text>
+  <text x="346" y="941" font-family="Courier New" font-size="9.5" fill="#6d28d9">🔗 id_dim_recl_SK : FK</text>
+  <line x1="340" y1="947" x2="515" y2="947" stroke="#ddd" stroke-width="0.8"/>
+  <text x="427" y="960" text-anchor="middle" font-family="Courier New" font-size="9" fill="#db2777" font-weight="bold">── CIBLE ──</text>
+  <text x="346" y="974" font-family="Courier New" font-size="9.5" fill="#db2777" font-weight="bold">● label_churn : INT(0/1)</text>
+  <line x1="340" y1="980" x2="515" y2="980" stroke="#ddd" stroke-width="0.8"/>
+ 
+
+  <!-- COL 2: Features TX -->
+ 
+  <text x="521" y="872" font-family="Courier New" font-size="9.5" fill="#059669">⚙ nb_transactions_30j : INT</text>
+  <text x="521" y="885" font-family="Courier New" font-size="9.5" fill="#059669">⚙ montant_moyen_30j : FLOAT</text>
+  <text x="521" y="898" font-family="Courier New" font-size="9.5" fill="#059669">⚙ variation_solde_30j : FLOAT</text>
+  <text x="521" y="911" font-family="Courier New" font-size="9.5" fill="#059669">⚙ solde_min_30j : FLOAT</text>
+  <text x="521" y="924" font-family="Courier New" font-size="9.5" fill="#059669">⚙ nb_rejets_30j : INT</text>
+  <text x="521" y="937" font-family="Courier New" font-size="9.5" fill="#059669">⚙ taux_utilisation_carte : FLOAT</text>
+  <text x="521" y="950" font-family="Courier New" font-size="9.5" fill="#059669">⚙ nb_retraits_dab_30j : INT</text>
+  <text x="521" y="963" font-family="Courier New" font-size="9.5" fill="#059669">⚙ pct_credit_vs_debit : FLOAT</text>
+
+  <!-- COL 3: Features INTER -->
+  
+  <text x="696" y="872" font-family="Courier New" font-size="9.5" fill="#059669">⚙ nb_connexions_30j : INT</text>
+  <text x="696" y="885" font-family="Courier New" font-size="9.5" fill="#059669">⚙ duree_moy_connexion_sec : FLOAT</text>
+  <text x="696" y="898" font-family="Courier New" font-size="9.5" fill="#059669">⚙ duree_inactivite_jours : INT</text>
+  <text x="696" y="911" font-family="Courier New" font-size="9.5" fill="#059669">⚙ canal_favori : VARCHAR</text>
+  <text x="696" y="924" font-family="Courier New" font-size="9.5" fill="#059669">⚙ score_nps_moyen : FLOAT</text>
+
+  <!-- COL 4: Features RECL -->
+
+  <text x="871" y="872" font-family="Courier New" font-size="9.5" fill="#059669">⚙ nb_reclamations_30j : INT</text>
+  <text x="871" y="885" font-family="Courier New" font-size="9.5" fill="#059669">⚙ nb_recl_non_resolues : INT</text>
+  <text x="871" y="898" font-family="Courier New" font-size="9.5" fill="#059669">⚙ delai_resolution_moyen : FLOAT</text>
+
+  <!-- COL 5: Features CLIENT -->
+
+  <text x="1046" y="872" font-family="Courier New" font-size="9.5" fill="#059669">⚙ anciennete_mois : INT</text>
+  <text x="1046" y="885" font-family="Courier New" font-size="9.5" fill="#059669">⚙ nb_produits_actifs : INT</text>
+  <text x="1046" y="898" font-family="Courier New" font-size="9.5" fill="#059669">⚙ score_risque_interne : INT</text>
+  <text x="1046" y="911" font-family="Courier New" font-size="9.5" fill="#059669">⚙ revenu_mensuel : FLOAT</text>
+
+  <rect x="340" y="820" width="1050" height="200" rx="4" fill="none" class="bdr-fait"/>
+</g>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- RELATION LINES -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+
+<!-- ── Snowflake 1:1 DIM_CLIENT → flocons ── -->
+<!-- CLIENT → PROFIL -->
+<line x1="250" y1="330" x2="130" y2="203" class="rel-dash" marker-end="url(#arr2)"/>
+<text x="155" y="262" font-family="Courier New" font-size="8" fill="#7c3aed">1..1</text>
+
+<!-- CLIENT → DIGITAL -->
+<line x1="290" y1="270" x2="355" y2="190" class="rel-dash" marker-end="url(#arr2)"/>
+<text x="330" y="228" font-family="Courier New" font-size="8" fill="#7c3aed">1..1</text>
+
+<!-- CLIENT → PRODUITS -->
+<line x1="370" y1="270" x2="580" y2="177" class="rel-dash" marker-end="url(#arr2)"/>
+<text x="480" y="218" font-family="Courier New" font-size="8" fill="#7c3aed">1..1</text>
+
+<!-- CLIENT → FINANCIER -->
+<line x1="410" y1="270" x2="750" y2="177" class="rel-dash" marker-end="url(#arr2)"/>
+<text x="590" y="218" font-family="Courier New" font-size="8" fill="#7c3aed">1..1</text>
+
+<!-- ── Snowflake 1:1 DIM_TRANSACTION → flocons ── -->
+<!-- TX → TYPE_OPER -->
+<line x1="1060" y1="300" x2="1042" y2="150" class="rel-dash" marker-end="url(#arr2)"/>
+<text x="1048" y="225" font-family="Courier New" font-size="8" fill="#ea580c">1..1</text>
+
+<!-- TX → CANAL_TX -->
+<line x1="1180" y1="300" x2="1247" y2="150" class="rel-dash" marker-end="url(#arr2)"/>
+<text x="1218" y="225" font-family="Courier New" font-size="8" fill="#ea580c">1..1</text>
+
+<!-- TX → SENS -->
+<line x1="1060" y1="300" x2="1042" y2="265" class="rel-dash" marker-end="url(#arr2)"/>
+
+<!-- TX → PRODUIT_TX -->
+<line x1="1180" y1="300" x2="1247" y2="265" class="rel-dash" marker-end="url(#arr2)"/>
+
+<!-- ── Snowflake 1:1 DIM_INTERACTION → flocons ── -->
+<!-- INTER → CANAL_INTER -->
+<line x1="1462" y1="300" x2="1462" y2="150" class="rel-dash" marker-end="url(#arr2)"/>
+<text x="1468" y="225" font-family="Courier New" font-size="8" fill="#0891b2">1..1</text>
+
+<!-- INTER → TYPE_INTER -->
+<line x1="1510" y1="300" x2="1510" y2="265" class="rel-dash" marker-end="url(#arr2)"/>
+
+<!-- ── Snowflake 1:1 DIM_RECLAMATION → flocons ── -->
+<!-- RECL → MOTIF -->
+<line x1="100" y1="620" x2="100" y2="585" class="rel-dash" marker-end="url(#arr2)"/>
+<text x="106" y="603" font-family="Courier New" font-size="8" fill="#db2777">1..1</text>
+
+<!-- RECL → STATUT -->
+<line x1="200" y1="620" x2="300" y2="585" class="rel-dash" marker-end="url(#arr2)"/>
+<text x="240" y="603" font-family="Courier New" font-size="8" fill="#db2777">1..1</text>
+
+<!-- ── FAIT ←→ DIMS (N:1) ── -->
+<!-- FAIT → DIM_CLIENT -->
+<line x1="390" y1="820" x2="315" y2="485" class="rel-line" marker-end="url(#arr)"/>
+<text x="320" y="680" font-family="Courier New" font-size="8.5" fill="#7c3aed" font-weight="bold">N</text>
+<text x="308" y="495" font-family="Courier New" font-size="8.5" fill="#7c3aed" font-weight="bold">1</text>
+
+<!-- FAIT → DIM_TRANSACTION -->
+<line x1="700" y1="820" x2="1125" y2="475" class="rel-line" marker-end="url(#arr)"/>
+<text x="870" y="680" font-family="Courier New" font-size="8.5" fill="#ea580c" font-weight="bold">N</text>
+<text x="1120" y="485" font-family="Courier New" font-size="8.5" fill="#ea580c" font-weight="bold">1</text>
+
+<!-- FAIT → DIM_INTERACTION -->
+<line x1="900" y1="820" x2="1485" y2="448" class="rel-line" marker-end="url(#arr)"/>
+<text x="1200" y="650" font-family="Courier New" font-size="8.5" fill="#0891b2" font-weight="bold">N</text>
+<text x="1480" y="460" font-family="Courier New" font-size="8.5" fill="#0891b2" font-weight="bold">1</text>
+
+<!-- FAIT → DIM_RECLAMATION -->
+<line x1="440" y1="820" x2="145" y2="742" class="rel-line" marker-end="url(#arr)"/>
+<text x="260" y="795" font-family="Courier New" font-size="8.5" fill="#db2777" font-weight="bold">N</text>
+<text x="148" y="752" font-family="Courier New" font-size="8.5" fill="#db2777" font-weight="bold">1</text>
+
+<!-- FAIT → DIM_DATE -->
+<line x1="537" y1="820" x2="537" y2="770" class="rel-line" marker-end="url(#arr)"/>
+<text x="543" y="800" font-family="Courier New" font-size="8.5" fill="#475569" font-weight="bold">N</text>
+<text x="543" y="775" font-family="Courier New" font-size="8.5" fill="#475569" font-weight="bold">1</text>
+
+
+
+</svg>
+</body>
+</html>
