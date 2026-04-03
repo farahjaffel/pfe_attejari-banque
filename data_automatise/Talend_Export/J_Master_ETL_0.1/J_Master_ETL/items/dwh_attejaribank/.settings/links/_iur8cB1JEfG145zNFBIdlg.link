@@ -1,0 +1,24 @@
+{
+  "itemId" : "_iur8cB1JEfG145zNFBIdlg",
+  "contextList" : [ {
+    "contextName" : "Default",
+    "repoId" : "_uiO7IC0wEfGfTdxsfmgfUA",
+    "parameterList" : [ {
+      "id" : "_ujb1AC0wEfGfTdxsfmgfUA",
+      "name" : "host"
+    }, {
+      "id" : "_6kMbsC0xEfGfTdxsfmgfUA",
+      "name" : "port"
+    } ]
+  }, {
+    "contextName" : "Docker",
+    "repoId" : "_uiO7IC0wEfGfTdxsfmgfUA",
+    "parameterList" : [ {
+      "id" : "_ujb1Ai0wEfGfTdxsfmgfUA",
+      "name" : "host"
+    }, {
+      "id" : "_6kMbsS0xEfGfTdxsfmgfUA",
+      "name" : "port"
+    } ]
+  } ]
+}

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:talendfile="platform:/resource/org.talend.model/model/TalendFile.xsd">
+  <talendfile:ContextType xmi:id="_ujSrEC0wEfGfTdxsfmgfUA" confirmationNeeded="false" name="Default">
+    <contextParameter xmi:id="_ujb1AC0wEfGfTdxsfmgfUA" comment="" name="host" prompt="host?" promptNeeded="false" repositoryContextId="built-in" type="id_String" value="localhost"/>
+    <contextParameter xmi:id="_6kMbsC0xEfGfTdxsfmgfUA" comment="" name="port" prompt="port?" promptNeeded="false" repositoryContextId="built-in" type="id_BigDecimal" value="5433"/>
+    <contextParameter xmi:id="_1biN4C0zEfGfTdxsfmgfUA" comment="" name="database" prompt="database?" promptNeeded="false" repositoryContextId="built-in" type="id_String" value="BD_ATTEJARI"/>
+    <contextParameter xmi:id="_1biN4S0zEfGfTdxsfmgfUA" comment="" name="schema" prompt="schema?" promptNeeded="false" repositoryContextId="built-in" type="id_String" value="DWH_ATTEJARI"/>
+    <contextParameter xmi:id="_1biN4i0zEfGfTdxsfmgfUA" comment="" name="username" prompt="username?" promptNeeded="false" repositoryContextId="built-in" type="id_String" value="postgres"/>
+    <contextParameter xmi:id="_1biN4y0zEfGfTdxsfmgfUA" comment="" name="password" prompt="password?" promptNeeded="false" repositoryContextId="built-in" type="id_String" value="farah"/>
+    <contextParameter xmi:id="_1biN5C0zEfGfTdxsfmgfUA" comment="" name="params" prompt="params?" promptNeeded="false" repositoryContextId="built-in" type="id_String" value=""/>
+  </talendfile:ContextType>
+  <talendfile:ContextType xmi:id="_ujb1AS0wEfGfTdxsfmgfUA" confirmationNeeded="false" name="Docker">
+    <contextParameter xmi:id="_ujb1Ai0wEfGfTdxsfmgfUA" comment="" name="host" prompt="host?" promptNeeded="false" repositoryContextId="built-in" type="id_String" value="host.docker.internal"/>
+    <contextParameter xmi:id="_6kMbsS0xEfGfTdxsfmgfUA" comment="" name="port" prompt="port?" promptNeeded="false" repositoryContextId="built-in" type="id_BigDecimal" value="5433"/>
+    <contextParameter xmi:id="_1biN5S0zEfGfTdxsfmgfUA" comment="" name="database" prompt="database?" promptNeeded="false" repositoryContextId="built-in" type="id_String" value="BD_ATTEJARI"/>
+    <contextParameter xmi:id="_1biN5i0zEfGfTdxsfmgfUA" comment="" name="schema" prompt="schema?" promptNeeded="false" repositoryContextId="built-in" type="id_String" value="DWH_ATTEJARI"/>
+    <contextParameter xmi:id="_1biN5y0zEfGfTdxsfmgfUA" comment="" name="username" prompt="username?" promptNeeded="false" repositoryContextId="built-in" type="id_String" value="postgres"/>
+    <contextParameter xmi:id="_1biN6C0zEfGfTdxsfmgfUA" comment="" name="password" prompt="password?" promptNeeded="false" repositoryContextId="built-in" type="id_String" value="farah"/>
+    <contextParameter xmi:id="_1biN6S0zEfGfTdxsfmgfUA" comment="" name="params" prompt="params?" promptNeeded="false" repositoryContextId="built-in" type="id_String" value=""/>
+  </talendfile:ContextType>
+  <talendfile:ContextType xmi:id="_ujb1Ay0wEfGfTdxsfmgfUA" confirmationNeeded="false" name="Local">
+    <contextParameter xmi:id="_ujb1BC0wEfGfTdxsfmgfUA" comment="" name="host" prompt="host?" promptNeeded="false" repositoryContextId="built-in" type="id_String" value="localhost"/>
+    <contextParameter xmi:id="_6kMbsi0xEfGfTdxsfmgfUA" comment="" name="port" prompt="port?" promptNeeded="false" repositoryContextId="built-in" type="id_BigDecimal" value="5433"/>
+    <contextParameter xmi:id="_1biN6i0zEfGfTdxsfmgfUA" comment="" name="database" prompt="database?" promptNeeded="false" repositoryContextId="built-in" type="id_String" value="BD_ATTEJARI"/>
+    <contextParameter xmi:id="_1biN6y0zEfGfTdxsfmgfUA" comment="" name="schema" prompt="schema?" promptNeeded="false" repositoryContextId="built-in" type="id_String" value="DWH_ATTEJARI"/>
+    <contextParameter xmi:id="_1biN7C0zEfGfTdxsfmgfUA" comment="" name="username" prompt="username?" promptNeeded="false" repositoryContextId="built-in" type="id_String" value="postgres"/>
+    <contextParameter xmi:id="_1biN7S0zEfGfTdxsfmgfUA" comment="" name="password" prompt="password?" promptNeeded="false" repositoryContextId="built-in" type="id_String" value="farah"/>
+    <contextParameter xmi:id="_1biN7i0zEfGfTdxsfmgfUA" comment="" name="params" prompt="params?" promptNeeded="false" repositoryContextId="built-in" type="id_String" value=""/>
+  </talendfile:ContextType>
+</xmi:XMI>

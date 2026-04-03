@@ -1,0 +1,61 @@
+version: '3.8'
+services:
+  postgres:
+    image: postgres:13
+    restart: always
+    ports:
+      - "5432:5432"   # Base interne Airflow sur 5432 (Laisse 5433 libre pour votre v16)
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=BD_ATTEJARI
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  airflow-webserver:
+    build: .
+    command: webserver
+    restart: always
+    depends_on:
+      - postgres
+    extra_hosts:
+      - "host.docker.internal:host-gateway" # Permet de voir votre Windows
+    environment:
+      - AIRFLOW__CORE__LOAD_EXAMPLES=False
+      - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://postgres:postgres@postgres/BD_ATTEJARI
+      - AIRFLOW__CORE__EXECUTOR=LocalExecutor
+      - AIRFLOW__WEBSERVER__SECRET_KEY=cle_secrete_farah_12345
+    ports:
+      - "8085:8080"
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./logs:/opt/airflow/logs
+      - ./plugins:/opt/airflow/plugins
+      - "G:/Telechargement/stage attejari/generation data:/opt/airflow/scripts"
+
+  airflow-scheduler:
+    build: .
+    command: scheduler
+    restart: always
+    depends_on:
+      - postgres
+    extra_hosts:
+      - "host.docker.internal:host-gateway" # Permet de voir votre Windows
+    environment:
+      - AIRFLOW__CORE__LOAD_EXAMPLES=False
+      - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://postgres:postgres@postgres/BD_ATTEJARI
+      - AIRFLOW__CORE__EXECUTOR=LocalExecutor
+      - AIRFLOW__WEBSERVER__SECRET_KEY=cle_secrete_farah_12345
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./logs:/opt/airflow/logs
+      - ./plugins:/opt/airflow/plugins
+      - "G:/Telechargement/stage attejari/generation data:/opt/airflow/scripts"
+
+volumes:
+  postgres_data:

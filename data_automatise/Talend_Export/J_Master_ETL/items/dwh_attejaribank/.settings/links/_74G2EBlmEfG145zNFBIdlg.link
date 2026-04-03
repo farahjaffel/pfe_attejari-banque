@@ -1,0 +1,29 @@
+{
+  "itemId" : "_74G2EBlmEfG145zNFBIdlg",
+  "contextList" : [ {
+    "contextName" : "Docker",
+    "repoId" : "_uiO7IC0wEfGfTdxsfmgfUA",
+    "parameterList" : [ {
+      "id" : "_ujb1Ai0wEfGfTdxsfmgfUA",
+      "name" : "host"
+    }, {
+      "id" : "_6kMbsS0xEfGfTdxsfmgfUA",
+      "name" : "port"
+    }, {
+      "id" : "_1biN5S0zEfGfTdxsfmgfUA",
+      "name" : "database"
+    }, {
+      "id" : "_1biN5i0zEfGfTdxsfmgfUA",
+      "name" : "schema"
+    }, {
+      "id" : "_1biN5y0zEfGfTdxsfmgfUA",
+      "name" : "username"
+    }, {
+      "id" : "_1biN6C0zEfGfTdxsfmgfUA",
+      "name" : "password"
+    }, {
+      "id" : "_1biN6S0zEfGfTdxsfmgfUA",
+      "name" : "params"
+    } ]
+  } ]
+}
