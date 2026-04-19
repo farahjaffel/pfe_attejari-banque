@@ -1,0 +1,9 @@
+{
+  "python-envs.defaultEnvManager": "ms-python.python:venv",
+  "python.analysis.ignore": [
+    "airflow_attijari/dags/**"
+  ],
+  "python.analysis.extraPaths": [
+    "G:/KAIROS_PFE_ATTIJARI"
+  ]
+}

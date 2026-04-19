@@ -1,0 +1,88 @@
+{
+  "itemId" : "_pTDfwB32EfG145zNFBIdlg",
+  "contextList" : [ {
+    "contextName" : "Default",
+    "repoId" : "_uiO7IC0wEfGfTdxsfmgfUA",
+    "parameterList" : [ {
+      "id" : "_ujb1AC0wEfGfTdxsfmgfUA",
+      "name" : "host"
+    }, {
+      "id" : "_6kMbsC0xEfGfTdxsfmgfUA",
+      "name" : "port"
+    }, {
+      "id" : "_1biN4S0zEfGfTdxsfmgfUA",
+      "name" : "schema"
+    }, {
+      "id" : "_1biN4C0zEfGfTdxsfmgfUA",
+      "name" : "database"
+    }, {
+      "id" : "_1biN4y0zEfGfTdxsfmgfUA",
+      "name" : "password"
+    }, {
+      "id" : "_1biN5C0zEfGfTdxsfmgfUA",
+      "name" : "params"
+    }, {
+      "id" : "_1biN4i0zEfGfTdxsfmgfUA",
+      "name" : "username"
+    }, {
+      "id" : "_ELOWsDi_EfG3s7BFgD90jw",
+      "name" : "schema_staging"
+    } ]
+  }, {
+    "contextName" : "Docker",
+    "repoId" : "_uiO7IC0wEfGfTdxsfmgfUA",
+    "parameterList" : [ {
+      "id" : "_ujb1Ai0wEfGfTdxsfmgfUA",
+      "name" : "host"
+    }, {
+      "id" : "_6kMbsS0xEfGfTdxsfmgfUA",
+      "name" : "port"
+    }, {
+      "id" : "_1biN5i0zEfGfTdxsfmgfUA",
+      "name" : "schema"
+    }, {
+      "id" : "_1biN5S0zEfGfTdxsfmgfUA",
+      "name" : "database"
+    }, {
+      "id" : "_1biN6C0zEfGfTdxsfmgfUA",
+      "name" : "password"
+    }, {
+      "id" : "_1biN6S0zEfGfTdxsfmgfUA",
+      "name" : "params"
+    }, {
+      "id" : "_1biN5y0zEfGfTdxsfmgfUA",
+      "name" : "username"
+    }, {
+      "id" : "_ELOWsTi_EfG3s7BFgD90jw",
+      "name" : "schema_staging"
+    } ]
+  }, {
+    "contextName" : "schema_staging",
+    "repoId" : "_uiO7IC0wEfGfTdxsfmgfUA",
+    "parameterList" : [ {
+      "id" : "_ZRzEoTi7EfG3s7BFgD90jw",
+      "name" : "host"
+    }, {
+      "id" : "_ZRzEoji7EfG3s7BFgD90jw",
+      "name" : "port"
+    }, {
+      "id" : "_ZRzEozi7EfG3s7BFgD90jw",
+      "name" : "database"
+    }, {
+      "id" : "_ZRzEpDi7EfG3s7BFgD90jw",
+      "name" : "schema"
+    }, {
+      "id" : "_ZRzEpTi7EfG3s7BFgD90jw",
+      "name" : "username"
+    }, {
+      "id" : "_ZRzEpji7EfG3s7BFgD90jw",
+      "name" : "password"
+    }, {
+      "id" : "_ZRzEpzi7EfG3s7BFgD90jw",
+      "name" : "params"
+    }, {
+      "id" : "_ELOWszi_EfG3s7BFgD90jw",
+      "name" : "schema_staging"
+    } ]
+  } ]
+}

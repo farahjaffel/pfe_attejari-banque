@@ -1,0 +1,13 @@
+@"
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+"@ | Out-File -FilePath pfe_attejari-banque/.gitignore -Encoding utf8

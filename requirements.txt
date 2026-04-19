@@ -1,0 +1,9 @@
+kafka-python
+psycopg2-binary
+pandas
+numpy
+scikit-learn
+shap
+python-dotenv
+matplotlib
+seaborn

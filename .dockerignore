@@ -1,0 +1,17 @@
+# Ignorer les logs qui bloquent le build
+**/logs/
+airflow_attijari/logs/
+
+# Ignorer les environnements virtuels et le cache
+.venv/
+venv/
+__pycache__/
+*.pyc
+
+# Ignorer les fichiers git
+.git/
+.gitignore
+
+# Ignorer les fichiers système Windows
+Thumbs.db
+.DS_Store
